@@ -23,6 +23,18 @@ class SafeLoRA:
     def __init__(self, peft_model:torch.nn.Module, config):
         """
         Please use safelora.model to get the projected model.
+
+        How to use SafeLoRA:
+        path = './LLM_Models/llama-2-7b-chat-fp16/' # load your base model of the peft model
+        model = AutoModelForCausalLM.from_pretrained(path)
+        pmodel = PeftModel.from_pretrained(model, 'finetuneLLM/finetuned_models/samsumBad-7b-fp16-peft-seed-42/',torch_dtype=torch.float16) #load peft model
+
+        SafeLoRAConfig.base_model_path = './LLM_Models/llama-2-7b-hf/'  #you should modify the path
+        SafeLoRAConfig.aligned_model_path = './LLM_Models/llama-2-7b-chat-fp16/' #you should modify the path
+
+        safelora = SafeLoRA(pmodel, SafeLoRAConfig)
+
+        Finally, you can get the projected model by "safelora.model".
         """
         super().__init__()
         self.peft_model = peft_model
